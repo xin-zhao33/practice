@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
-import { Button ,message} from 'antd';
+import { BrowserRouter, Route, Switch,Redirect } from 'react-router-dom'
+import Login from './pages/login/Login'
+import Admin from './pages/admin/Admin'
 
 export default class App extends Component {
-
-  handelClick = ()=>{
-    message.info('This is a normal message');
-  }
-
-  render() {
+  render () {
     return (
-      <div>
-       <Button type='primary' onClick={this.handelClick}>primary</Button>
-      </div>
+      <BrowserRouter>
+        <Switch>
+          <Route path='/login' component={Login}></Route>
+          <Route path='/admin' component={Admin}></Route>
+          <Redirect from='/' to='/login' />
+        </Switch>
+      </BrowserRouter>
     )
   }
 }
