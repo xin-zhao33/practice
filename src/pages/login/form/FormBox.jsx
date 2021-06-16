@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { reqLogin } from '../../../api/index'
+import memoryUtils from '../../../utils/memoryUtils'
+import { saveUsers } from '../../../utils/storyUtils'
 import './FormBox.less'
 
 const Item = Form.Item
@@ -12,6 +15,8 @@ export default class FormBox extends Component {
     const res = await reqLogin(username, password)
     if (res.status === 0) {
       message.success('登录成功!')
+      memoryUtils.users = res.data
+      saveUsers(res.data)
       this.props.toAdmin()
     } else {
       message.error(res.msg)
@@ -25,16 +30,24 @@ export default class FormBox extends Component {
     // const reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/
     const reg = /^[a-zA-Z0-9_]+$/
     if (!val) {
-      callback(new Error('请输入密码!'))
+      // callback(new Error('请输入密码!'))
+      return Promise.reject('请输入密码!');
+
     }
     if (reg.test(val)) {
-      callback()
+      // callback()
+      return Promise.resolve()
     } else {
-      callback(new Error('请输入正确的11位手机号!'))
+      // callback(new Error('请输入正确的11位手机号!'))
+      return Promise.reject('请输入正确密码!');
     }
   }
 
   render() {
+    const users = memoryUtils.users
+    if (users || users._id) {
+      return <Redirect to='/admin' />
+    }
     return (
       <div>
         <Form
