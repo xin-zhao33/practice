@@ -1,0 +1,55 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2617672 */
+  src: url('iconfont.woff2?t=1623937481005') format('woff2'),
+       url('iconfont.woff?t=1623937481005') format('woff'),
+       url('iconfont.ttf?t=1623937481005') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-piechart:before {
+  content: "\e7ba";
+}
+
+.icon-appstore:before {
+  content: "\e75a";
+}
+
+.icon-bar-chart:before {
+  content: "\e61e";
+}
+
+.icon-user:before {
+  content: "\e6e1";
+}
+
+.icon-area-chart:before {
+  content: "\e717";
+}
+
+.icon-safety:before {
+  content: "\e74c";
+}
+
+.icon-home:before {
+  content: "\e609";
+}
+
+.icon-bars:before {
+  content: "\e600";
+}
+
+.icon-linechart:before {
+  content: "\e6e8";
+}
+
+.icon-tool:before {
+  content: "\e777";
+}
+

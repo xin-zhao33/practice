@@ -1,0 +1,20 @@
+.left-nav .left-title {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #002140;
+}
+.left-nav .left-title img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+.left-nav .left-title h1 {
+  color: #fff;
+  font-size: 20px;
+}
+.left-nav .left-menu i {
+  margin-right: 8px;
+  font-size: 16px;
+}

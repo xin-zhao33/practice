@@ -1,0 +1,79 @@
+{
+  "id": "2617672",
+  "name": "react1",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "929675",
+      "name": "pie-chart",
+      "font_class": "piechart",
+      "unicode": "e7ba",
+      "unicode_decimal": 59322
+    },
+    {
+      "icon_id": "1029974",
+      "name": "appstore",
+      "font_class": "appstore",
+      "unicode": "e75a",
+      "unicode_decimal": 59226
+    },
+    {
+      "icon_id": "1898545",
+      "name": "bar-chart",
+      "font_class": "bar-chart",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "4503727",
+      "name": "user",
+      "font_class": "user",
+      "unicode": "e6e1",
+      "unicode_decimal": 59105
+    },
+    {
+      "icon_id": "7239616",
+      "name": "area-chart",
+      "font_class": "area-chart",
+      "unicode": "e717",
+      "unicode_decimal": 59159
+    },
+    {
+      "icon_id": "7239874",
+      "name": "safety",
+      "font_class": "safety",
+      "unicode": "e74c",
+      "unicode_decimal": 59212
+    },
+    {
+      "icon_id": "8879771",
+      "name": "home",
+      "font_class": "home",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "9358601",
+      "name": "bars",
+      "font_class": "bars",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "11864338",
+      "name": "line chart",
+      "font_class": "linechart",
+      "unicode": "e6e8",
+      "unicode_decimal": 59112
+    },
+    {
+      "icon_id": "18361086",
+      "name": "tool",
+      "font_class": "tool",
+      "unicode": "e777",
+      "unicode_decimal": 59255
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
+import './assets/font/iconfont.css'
 
 import {getUsers} from './utils/storyUtils'
 import memoryUtils from './utils/memoryUtils'

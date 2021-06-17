@@ -45,7 +45,7 @@ export default class FormBox extends Component {
 
   render() {
     const users = memoryUtils.users
-    if (users || users._id) {
+    if (users && users._id) {
       return <Redirect to='/admin' />
     }
     return (
