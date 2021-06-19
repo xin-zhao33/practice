@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { Layout } from 'antd';
 import memoryUtils from '../../utils/memoryUtils'
-import LeftNav from './components/leftNav/LeftNav'
-import NavTop from './components/header/NavTop'
+import LeftNav from '../../components/leftNav/LeftNav'
+import NavTop from '../../components/header/NavTop'
 import Home from './home/Home'
 import ProductManage from './productManage/ProductManage'
 import Category from './category/Category'
@@ -17,6 +17,7 @@ const { Footer, Sider, Content } = Layout;
 
 
 export default class Admin extends Component {
+
   render() {
     const users = memoryUtils.users
     if (!users || !users._id) {
@@ -29,8 +30,8 @@ export default class Admin extends Component {
           <LeftNav />
         </Sider>
         <Layout>
-          <NavTop />
-          <Content>
+          <NavTop/>
+          <Content style={{margin: '20px',backgroundColor: '#fff'}}>
 
             <Switch>
               <Route path='/home' component={Home}></Route>
