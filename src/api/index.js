@@ -30,7 +30,7 @@ export const reqWeather = city => {
 export const getCategory = (parentId)=>ajax('/manage/category/list',{parentId},'GET')
 
 // 添加分类
-export const addCategory = (parentId,categoryName)=>ajax('/manage/category/list',{parentId,categoryName},'POST')
+export const addCategory = ({parentId,categoryName})=>ajax('/manage/category/add',{parentId,categoryName},'POST')
 
 // 编辑分类
-export const equitCategory = ({categoryId,categoryName})=>ajax('/manage/category/list',{categoryId,categoryName},'POST')
+export const editCategory = ({categoryId,categoryName})=>ajax('/manage/category/update',{categoryId,categoryName},'POST')

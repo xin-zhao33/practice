@@ -1,39 +1,39 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { Input } from 'antd'
+import PropTypes from 'prop-types'
 
-export default class EditCategroy extends Component {
+class EditCategroy extends Component {
+
+  static propTypes = {
+    categroyInfo: PropTypes.string.isRequired
+  }
 
   state = {
-    val: ''
+    inputVal: this.props.categroyInfo
   }
-  onFinish = (val) => {
-    console.log(val)
+  inputValue = (e) => {
+    this.setState({
+      inputVal: e.target.value
+    })
   }
-  onChange = (e) => {
-    console.log(e.target.value)
+  componentWillReceiveProps(props) {
+    this.setState({
+      inputVal: props.categroyInfo
+    })
   }
-  componentDidMount() {
-    if (this.props.onRef) {
-      this.props.onRef(this);
-    }
-
-  }
-
   render() {
-    const sharedProps = {
-      defaultValue: this.props.categroyInfo,
-    }
+    const { inputVal } = this.state
     return (
       <div>
-        <Input {...sharedProps} placeholder='请输入需要修改的内容!' onChange={this.onChange}></Input>
+
+        <Input value={inputVal} onChange={this.inputValue} placeholder='请输入分类名称'></Input>
+
       </div>
     )
   }
 }
-EditCategroy.propTypes = {
-  categroyInfo: PropTypes.string
-}
+
+export default EditCategroy
 
 
 

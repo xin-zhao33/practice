@@ -5,7 +5,7 @@ import { Card, Button, Table, message, Modal } from 'antd';
 import { PlusOutlined, ArrowRightOutlined } from '@ant-design/icons'
 
 import LinkButton from '../../../components/link-button';
-import { getCategory } from '../../../api/index.js'
+import { getCategory, editCategory, addCategory } from '../../../api/index.js'
 
 export default class Category extends Component {
 
@@ -13,8 +13,10 @@ export default class Category extends Component {
     loading: false,
     firstTableList: [],
     secondTableList: [],
+    categroyList: [],
     parentId: '0',
     categoryName: '',
+    categoryId: '',
     showStatus: 0, // 1 添加  2 修改
   }
 
@@ -40,7 +42,7 @@ export default class Category extends Component {
       },
     ]
   }
-
+  // 表格数据
   getTableList = async () => {
 
     const { parentId } = this.state
@@ -51,6 +53,9 @@ export default class Category extends Component {
       if (parentId === '0') {
 
         this.setState({ firstTableList: res.data })
+        this.setState({
+          categroyList: res.data
+        })
       } else {
         this.setState({ secondTableList: res.data })
       }
@@ -74,12 +79,17 @@ export default class Category extends Component {
       parentId: '0',
       categoryName: ''
     })
+    this.setState({
+      categroyList: this.state.firstTableList
+    })
   }
   // 关闭
   handleCancel = () => {
     this.setState({
-      showStatus: 0
+      showStatus: 0,
     })
+
+    this.child.setState({ inputVal: '' })
   }
   // 添加
   addCategoryInfo = () => {
@@ -88,13 +98,21 @@ export default class Category extends Component {
     })
   }
 
-  getFormData = () => {
-    // this.child.onFinish()
-    console.log(this)
-  }
-
-  addOk = () => {
-    this.getFormData()
+  addOk = async () => {
+    const parentId = this.child.state.selectInfo || '0'
+    const categoryName = this.child.state.inputVal
+    const res = await addCategory({ parentId, categoryName })
+    if (res.status === 0) {
+      message.success('添加成功')
+      if (parentId === '0') {
+        this.getTableList()
+      }
+      this.setState({
+        showStatus: 0,
+      })
+    } else {
+      message.error(res.msg)
+    }
   }
   // 编辑
   editCategoryInfo = (categroy) => {
@@ -102,8 +120,31 @@ export default class Category extends Component {
       showStatus: 2
     })
     this.dataName = categroy.name
-    console.log(categroy)
+    this.setState({
+      categoryId: categroy._id
+    })
   }
+
+  subForm = React.createRef()
+
+  editOk = async () => {
+    const categoryName = this.subForm.current.state.inputVal
+    const { categoryId } = this.state
+    const res = await editCategory({ categoryId, categoryName })
+    if (res.status === 0) {
+      message.success('修改成功!')
+      this.getTableList()
+      this.setState({
+        showStatus: 0
+      })
+    } else {
+      message.error('修改数据失败!')
+      this.setState({
+        showStatus: 0
+      })
+    }
+  }
+
   componentDidMount() {
     this.getTableList()
   }
@@ -112,8 +153,7 @@ export default class Category extends Component {
     this.initTable()
   }
   render() {
-    const { firstTableList, loading, secondTableList, parentId, categoryName, showStatus } = this.state
-
+    const { firstTableList, loading, secondTableList, parentId, categoryName, showStatus, categroyList } = this.state
     const title = parentId === '0' ? '一级分类标题' : (
       <span>
         <LinkButton onClick={this.showFirstTableList}>一级分类标题</LinkButton>
@@ -133,15 +173,15 @@ export default class Category extends Component {
     return (
       <div>
         <Card title={title} extra={extra} style={{ width: '100%' }}>
-          <Table loading={loading} rowKey='_id' bordered dataSource={parentId === '0' ? firstTableList : secondTableList} columns={this.columns} pagination={{ defaultPageSize: 5 }} />
+          <Table loading={loading} rowKey='_id' bordered dataSource={parentId === '0' ? firstTableList : secondTableList} columns={this.columns} pagination={{ defaultPageSize: 5,pageSizeOptions:[5,15,25],showSizeChanger:false }} />
         </Card>
         {/* 添加 */}
         <Modal title="Basic Modal" visible={showStatus === 1} onOk={this.addOk} onCancel={this.handleCancel}>
-          <AddCategroy></AddCategroy>
+          <AddCategroy categroyList={categroyList} parentId={parentId} ref={c => this.child = c}></AddCategroy>
         </Modal>
         {/* 修改 */}
-        <Modal title="修改分类" visible={showStatus === 2} onOk={this.edidOk} onCancel={this.handleCancel}>
-          <EditCategroy categroyInfo={dataName} onRef={(ref) => { this.child = ref }}></EditCategroy>
+        <Modal title="修改分类" visible={showStatus === 2} onOk={this.editOk} onCancel={this.handleCancel}>
+          <EditCategroy categroyInfo={dataName} ref={this.subForm} />
         </Modal>
       </div>
     )

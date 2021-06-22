@@ -1,37 +1,47 @@
 import React, { Component } from 'react'
-import { Form, Select, Input } from 'antd'
+import { Select, Input } from 'antd'
 
 const { Option } = Select;
-const Item = Form.Item
 export default class AddCategroy extends Component {
 
-  onGenderChange = (value) => {
-    console.log(value)
+  state = {
+    inputVal: '',
+    selectInfo: ''
   }
-
-  onFinish = (values) => {
-    console.log('Success:', values);
+  onGenderChange = (_, option) => {
+    if (option) {
+      this.setState({
+        selectInfo: option.value
+      })
+    }
+  }
+  onChange = (e) => {
+    this.setState({
+      inputVal: e.target.value
+    })
   }
 
   render() {
+    const { inputVal } = this.state
+    const optionList = this.props.categroyList
+    const defaultVal = this.props.parentId
+    
     return (
-      <Form onFinish={this.onFinish} initialValues={{ remember: true }}>
-        <Item name='select' rules={[{ required: true, message: '请选择' }]}>
-          <Select
-            placeholder="Select a option and change input text above"
-            onChange={this.onGenderChange}
-            allowClear
-            // value='male'
-          >
-            <Option value="male">male</Option>
-            <Option value="female">female</Option>
-            <Option value="other">other</Option>
-          </Select>
-        </Item>
-        <Item rules={[{ required: true ,message: '请输入名称!'}]}>
-          <Input value='aaa' placeholder='请输入分类名称' />
-        </Item>
-      </Form>
+      <div>
+        <Select
+          defaultValue={defaultVal}
+          onChange={this.onGenderChange}
+          allowClear
+          style={{ width: '100%', marginBottom: '20px' }}
+        >
+          <Option value='0' >一级分类列表</Option>
+          {
+            optionList.map(item => <Option value={item._id} key={item._id}>{item.name}</Option>)
+          }
+        </Select>
+        <Input value={inputVal} onChange={this.onChange} placeholder='请输入分类名称' />
+      </div >
+
     )
   }
 }
