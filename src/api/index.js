@@ -34,3 +34,15 @@ export const addCategory = ({parentId,categoryName})=>ajax('/manage/category/add
 
 // 编辑分类
 export const editCategory = ({categoryId,categoryName})=>ajax('/manage/category/update',{categoryId,categoryName},'POST')
+
+// 商品管理列表
+export const productList =({pageNum,pageSize})=>ajax('/manage/product/list',{pageNum,pageSize},'GET')
+
+// 商品搜索
+export const queryProduct=({pageNum,pageSize,searchName,searchType})=>ajax('/manage/product/search',{pageNum,pageSize,[searchType]:searchName},'GET')
+
+// 添加商品
+export const addProduct = ({categoryId,pCategoryId,name,desc,price,detail,imgs})=>ajax('/manage/product/add',{categoryId,pCategoryId,name,desc,price,detail,imgs},'POST')
+
+// 更新商品
+export const updateProduct = ({_id,categoryId,pCategoryId,name,desc,price,detail,imgs})=>ajax('/manage/product/update',{_id,categoryId,pCategoryId,name,desc,price,detail,imgs},'POST')
