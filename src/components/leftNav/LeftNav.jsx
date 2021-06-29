@@ -41,7 +41,7 @@ class LeftNav extends Component {
         )
       } else {
         item.children.forEach(route => {
-          if (route.key === paths) {
+          if (paths.indexOf(route.key) === 0) {
             this.openKey = item.key
           }
         })
@@ -60,7 +60,12 @@ class LeftNav extends Component {
 
   render() {
     const menuNodes = this.getMenuNodes(menuList)
-    const paths = this.props.location.pathname
+    let paths = this.props.location.pathname
+
+    if (paths.indexOf('/product') === 0) {
+      paths = '/product'
+    }
+
     const openKey = this.openKey
     return (
       <div className='left-nav'>

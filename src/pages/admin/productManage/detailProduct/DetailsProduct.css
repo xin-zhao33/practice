@@ -1,0 +1,29 @@
+.arrow-left {
+  color: #2a9878;
+  margin-right: 10px;
+}
+.to-home {
+  cursor: pointer;
+}
+.list-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 16px;
+}
+.list-item .list-l {
+  font-weight: 700;
+  font-size: 20px;
+  margin-right: 10px;
+}
+.list-item img {
+  width: 200px;
+  height: 200px;
+  border: 2px solid #000;
+  margin-right: 10px;
+  padding: 10px;
+}
+.list-item .list-tags {
+  color: red;
+  margin-bottom: 20px;
+}
