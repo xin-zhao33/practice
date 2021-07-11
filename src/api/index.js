@@ -46,3 +46,12 @@ export const addProduct = ({categoryId,pCategoryId,name,desc,price,detail,imgs})
 
 // 更新商品
 export const updateProduct = ({_id,categoryId,pCategoryId,name,desc,price,detail,imgs})=>ajax('/manage/product/update',{_id,categoryId,pCategoryId,name,desc,price,detail,imgs},'POST')
+
+// 角色列表
+export const roleList =()=>ajax('/manage/role/list', 'GET')
+
+// 添加角色
+export const addRoleName = ({roleName})=> ajax('/manage/role/add', {roleName} ,'POST')
+
+// 更新权限 
+export const updateRole = (role) => ajax('/manage/role/update',role,'POST')

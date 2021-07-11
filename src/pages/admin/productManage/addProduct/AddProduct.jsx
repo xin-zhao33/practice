@@ -1,31 +1,44 @@
 import React, { Component } from 'react'
-import { Form, Input, Upload, Button, Cascader, Card, message } from 'antd'
-import { PlusOutlined, ArrowLeftOutlined } from '@ant-design/icons'
+import { Form, Input, Button, Cascader, Card, message } from 'antd'
+import { ArrowLeftOutlined } from '@ant-design/icons'
 import { getCategory, addProduct } from '../../../../api/index'
+import UploadImg from './UploadImg'
 import './addProduct.less'
 
 const { Item } = Form
 const { TextArea } = Input;
-function getBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-}
+
 export default class AddProduct extends Component {
 
+  constructor(props) {
+    super(props)
+    this.imgs = React.createRef();
+  }
   state = {
-    fileList: [],
     optionLists: []
   }
-  initOption = (data) => {
+
+  initOption = async (data) => {
     const optionLists = data.map(c => ({
       value: c._id,
       label: c.name,
       isLeaf: false,
     }))
+
+    if (this.status) {
+      const { categoryId } = this.props.location.state || {}
+      const sub = await this.getCategorys(categoryId)
+      console.log(sub)
+      const childOtions = sub.map(c => ({
+        value: c._id,
+        label: c.name,
+        isLeaf: true,
+      }))
+      console.log(childOtions)
+      const targetOption = optionLists.find(option => option.value === categoryId)
+      console.log(targetOption)
+      targetOption.children = childOtions
+    }
     this.setState({ optionLists })
   }
   getCategorys = async (parentId) => {
@@ -40,12 +53,14 @@ export default class AddProduct extends Component {
     }
   }
   onFinish = (value) => {
+
+    // const { name, desc, price, category, detail, imgs } = value
+    value.imgs = this.imgs.current.getImgs()
     console.log(value)
-    const { name, desc, price, category, detail, imgs } = value
-    // const {categoryId, pCategoryId} = category
-    const categoryId = category[1]
-    const pCategoryId = category[0]
-    this.addProducts({ categoryId, pCategoryId, name, desc, price, detail, imgs })
+    // // const {categoryId, pCategoryId} = category
+    // const categoryId = category[1]
+    // const pCategoryId = category[0]
+    // this.addProducts({ categoryId, pCategoryId, name, desc, price, detail, imgs })
   }
   addProducts = async ({ categoryId, pCategoryId, name, desc, price, detail, imgs }) => {
     const res = await addProduct({ categoryId, pCategoryId, name, desc, price, detail, imgs })
@@ -62,57 +77,45 @@ export default class AddProduct extends Component {
       callBack('价格必须大于0')
     }
   }
-  // 上传
-  handlePreview = async file => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
 
-    this.setState({
-      previewImage: file.url || file.preview,
-      previewVisible: true,
-      previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
-    });
-  };
   loadData = async selectedOptions => {
-    const targetOption = selectedOptions[selectedOptions.length - 1];
-    // const targetOption = selectedOptions[0];
-    targetOption.loading = true;
-    // load options lazily
-    const subCategorys = await this.getCategorys(targetOption.value)
+    // 得到选择的option对象
+    const targetOption = selectedOptions[0]
+    // 显示loading
+    targetOption.loading = true
 
-    targetOption.loading = false;
-    if (subCategorys && subCategorys.length > 0) {
-      const childOtions = subCategorys.map(c => ({
+    // 根据选中的分类, 请求获取二级分类列表
+    const subCategorys = await this.getCategorys(targetOption.value)
+    // 隐藏loading
+    targetOption.loading = false
+    // 二级分类数组有数据
+    if (subCategorys && subCategorys.length>0) {
+      // 生成一个二级列表的options
+      const childOptions = subCategorys.map(c => ({
         value: c._id,
         label: c.name,
-        isLeaf: true,
+        isLeaf: true
       }))
-      targetOption.children = childOtions
-    } else {
+      // 关联到当前option上
+      targetOption.children = childOptions
+    } else { // 当前选中的分类没有二级分类
       targetOption.isLeaf = true
     }
 
+    // 更新options状态
     this.setState({
       optionLists: [...this.state.optionLists],
     })
-  };
+  }
 
-  handleChange = ({ fileList }) => this.setState({ fileList });
   componentDidMount() {
     this.getCategorys()
-    console.log(this.props.location.state)
+
     const product = this.props.location.state
     this.status = !!product
   }
   render() {
-    const uploadButton = (
-      <div>
-        <PlusOutlined />
-        <div style={{ marginTop: 8 }}>上传图片</div>
-      </div>
-    )
-    const { fileList } = this.state
+
 
     const title = (
       <div onClick={() => this.props.history.push('/product')} className='to-home'>
@@ -120,14 +123,14 @@ export default class AddProduct extends Component {
       </div>
     )
     const product = this.props.location.state || {}
-    product.category = [product.categoryId,product.pCategoryId]
+    product.category = [product.categoryId, product.pCategoryId]
     // const { name, desc, price } = product || {}
     return (
       <Card title={title}>
         <Form
           onFinish={this.onFinish}
           wrapperCol={{ span: 8 }}
-          initialValues={product}
+        initialValues={product}
         >
           <Item label='商品名称' name="name" rules={[{ required: true, message: '请输入商品名称!' }]}>
             <Input placeholder='请输入商品名称'></Input>
@@ -144,15 +147,7 @@ export default class AddProduct extends Component {
             </Cascader>
           </Item>
           <Item label='商品图片' name='imgs'>
-            <Upload
-              action='http://132.232.84.228:5000/upload'
-              listType="picture-card"
-              fileList={fileList}
-              onPreview={this.handlePreview}
-              onChange={this.handleChange}
-            >
-              {fileList.length >= 8 ? null : uploadButton}
-            </Upload>
+            <UploadImg ref={this.imgs} />
           </Item>
           <Item>
             <Button type="primary" htmlType="submit">

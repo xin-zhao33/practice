@@ -13,7 +13,7 @@ export default class ProductHome extends Component {
   state = {
     dataSource: [],
     loading: false,
-    total: 50,
+    total: '',
     searchType: 'productName',
     searchName: '',
     pageNum: 1
