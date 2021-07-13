@@ -3,8 +3,7 @@ import jsonp from 'jsonp'
 import { Message } from 'antd'
 
 // 登录
-export const reqLogin = (username, password) =>
-  ajax('/login', { username, password }, 'POST')
+export const reqLogin = (username, password) => ajax('/login', { username, password }, 'POST')
 
 export const reqAddUser = user => ajax('/manage/user/add', user, 'POST')
 

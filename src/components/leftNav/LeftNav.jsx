@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { Menu } from 'antd'
 import { Link, withRouter } from 'react-router-dom'
+
+import { connect } from 'react-redux'
+import { setHeadTitle } from '../../redux/action'
 import menuList from '../../config/menuConfig.js'
 import logo from '../../assets/images/logo.png'
 import './LeftNav.less'
@@ -29,11 +32,15 @@ class LeftNav extends Component {
     return menuList.reduce((pre, item) => {
       const paths = this.props.location.pathname
       if (!item.children) {
-
+        // 当前显示的item
+        if (item.key === paths || paths.indexOf(item.key) === 0) {
+          // 更新redux
+          this.props.setHeadTitle(item.title)
+        }
         pre.push(
           (
-            <Menu.Item key={item.key}>
-              <Link to={item.key}>
+            <Menu.Item key={item.key} >
+              <Link to={item.key} onClick={() => this.props.setHeadTitle(item.title)}>
                 <i className={['iconfont', `icon-${item.icon}`].join(' ')}></i>{item.title}
               </Link>
             </Menu.Item>
@@ -57,7 +64,6 @@ class LeftNav extends Component {
       return pre
     }, [])
   }
-
   render() {
     const menuNodes = this.getMenuNodes(menuList)
     let paths = this.props.location.pathname
@@ -92,4 +98,7 @@ class LeftNav extends Component {
   }
 }
 
-export default withRouter(LeftNav)
+export default connect(
+  state => ({}),
+  { setHeadTitle }
+)(withRouter(LeftNav))

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import { Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -61,7 +62,7 @@ class NavTop extends Component {
     Modal.confirm({
       title: '您确定要退出吗?',
       icon: <ExclamationCircleOutlined />,
-      onOk:()=> {
+      onOk: () => {
         memoryUtils.users = {}
         removeUser()
         this.props.history.replace('/login')
@@ -81,7 +82,8 @@ class NavTop extends Component {
   render() {
     const { curTime, weather, temperature, city } = this.state
     const users = memoryUtils.users.username
-    const title = this.getTitle()
+    // const title = this.getTitle()
+    const title = this.props.headTitle
     return (
       <div className='headers'>
         <div className='header-top'>
@@ -103,4 +105,7 @@ class NavTop extends Component {
   }
 }
 
-export default withRouter(NavTop)
+export default connect(
+  state => ({ headTitle: state.headTitle }),
+  {}
+)(withRouter(NavTop))

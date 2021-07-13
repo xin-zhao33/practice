@@ -1,26 +1,30 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import {login} from '../../../redux/action'
 
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { reqLogin } from '../../../api/index'
-import memoryUtils from '../../../utils/memoryUtils'
-import { saveUsers } from '../../../utils/storyUtils'
+// import { reqLogin } from '../../../api/index'
+// import memoryUtils from '../../../utils/memoryUtils'
+// import { saveUsers } from '../../../utils/storyUtils'
 import './FormBox.less'
 
 const Item = Form.Item
-export default class FormBox extends Component {
-  onFinish = async (values) => {
+class FormBox extends Component {
+  onFinish = (values) => {
+    console.log(values)
     const { username, password } = values
-    const res = await reqLogin(username, password)
-    if (res.status === 0) {
-      message.success('登录成功!')
-      memoryUtils.users = res.data
-      saveUsers(res.data)
+    this.props.login(username, password)
       this.props.toAdmin()
-    } else {
-      message.error(res.msg)
-    }
+    // const res = await reqLogin(username, password)
+    // if (res.status === 0) {
+    //   message.success('登录成功!')
+    //   memoryUtils.users = res.data
+    //   saveUsers(res.data)
+    // } else {
+    //   message.error(res.msg)
+    // }
   };
   onFinishFailed = (errorInfo) => {
     console.log(errorInfo);
@@ -44,7 +48,7 @@ export default class FormBox extends Component {
   }
 
   render() {
-    const users = memoryUtils.users
+    const users = this.props.user
     if (users && users._id) {
       return <Redirect to='/admin' />
     }
@@ -83,3 +87,7 @@ export default class FormBox extends Component {
     )
   }
 }
+export default connect(
+  state => ({ user: state.user }),
+  {login }
+)(FormBox)
